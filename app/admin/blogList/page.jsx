@@ -1,11 +1,13 @@
 "use client";
 import BlogTableItem from "@/Components/AdminComponents/BlogTableItem";
 import axios from "axios";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 const page = () => {
   const [blogs, setBlogs] = useState([]);
+  const { id } = useParams();
 
   const fetchBlogs = async () => {
     const response = await axios.get("/api/blog");
@@ -13,11 +15,7 @@ const page = () => {
   };
 
   const deleteBlog = async (mongoId) => {
-    const response = await axios.delete("/api/blog", {
-      params: {
-        id: mongoId,
-      },
-    });
+    const response = await axios.delete("/api/blog", (id = { mongoId }));
     toast.success(response.data.msg);
     fetchBlogs();
   };
